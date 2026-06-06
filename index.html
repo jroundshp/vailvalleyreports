@@ -152,6 +152,12 @@
             color: var(--text-muted);
         }
         .loc-temp.loading-temp { color: var(--text-muted); font-weight: 500; }
+        .temp-c {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
 
         /* STATUS DOT */
         .status-dot {
@@ -233,6 +239,7 @@
         .day-icon { font-size: 1.25rem; margin: 4px 0 2px; }
         .day-hi { font-size: 0.85rem; font-weight: 750; color: var(--primary); }
         .day-lo { font-size: 0.72rem; color: var(--text-muted); }
+        .day-c { font-size: 0.6rem; color: var(--text-muted); opacity: 0.85; margin-top: 1px; }
         .day-precip { font-size: 0.62rem; color: var(--accent); font-weight: 600; margin-top: 2px; min-height: 0.9em; }
         .day-snow { color: #5b7fc7; }
 
@@ -369,7 +376,7 @@
             <div class="loc-card ${loc.tier}" id="card-${loc.id}">
                 <div class="loc-info">
                     <div class="loc-name">${loc.name}</div>
-                    <div><span class="loc-elev">${loc.elevFt.toLocaleString()} FT</span></div>
+                    <div><span class="loc-elev">${loc.elevFt.toLocaleString()} FT &middot; ${Math.round(loc.elevFt * 0.3048).toLocaleString()} M</span></div>
                     <div class="loc-cond" id="cond-${loc.id}">&nbsp;</div>
                     <div class="loc-wx" id="wx-${loc.id}"></div>
                     <div class="loc-source" id="src-${loc.id}"><span class="status-dot ${loc.source === 'openmeteo' ? 'est' : 'live'}"></span>${loc.sourceLabel}</div>
@@ -382,7 +389,9 @@
     function setCard(loc, tempF, cond, asOf, estimated, extra) {
         const tempEl = document.getElementById(`temp-${loc.id}`);
         tempEl.classList.remove('loading-temp');
-        tempEl.innerHTML = tempF != null ? `${Math.round(tempF)}<span class="deg">°F</span>` : '—';
+        tempEl.innerHTML = tempF != null
+            ? `${Math.round(tempF)}<span class="deg">°F</span><div class="temp-c">${Math.round(f2c(tempF))}°C</div>`
+            : '—';
 
         const condEl = document.getElementById(`cond-${loc.id}`);
         condEl.innerHTML = cond && cond.text
@@ -393,7 +402,7 @@
         const bits = [];
         if (extra) {
             if (extra.feelsF != null && tempF != null && Math.abs(extra.feelsF - tempF) >= 3) {
-                bits.push(`Feels like ${Math.round(extra.feelsF)}°`);
+                bits.push(`Feels like ${Math.round(extra.feelsF)}°F / ${Math.round(f2c(extra.feelsF))}°C`);
             }
             if (extra.windMph != null) {
                 bits.push(`Wind ${extra.windDir || ''} ${Math.round(extra.windMph)} mph`.replace('  ', ' '));
@@ -412,6 +421,10 @@
 
     function fmtTime(date) {
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    }
+
+    function f2c(f) {
+        return (f - 32) * 5 / 9;
     }
 
     // ─── DATA SOURCES ────────────────────────────────────────────────
@@ -526,6 +539,7 @@
                 <div class="day-icon">${wmo.icon}</div>
                 <div class="day-hi">${Math.round(d.temperature_2m_max[i])}°</div>
                 <div class="day-lo">${Math.round(d.temperature_2m_min[i])}°</div>
+                <div class="day-c">${Math.round(f2c(d.temperature_2m_max[i]))}/${Math.round(f2c(d.temperature_2m_min[i]))}°C</div>
                 <div class="day-precip">${precipLine}</div>
             </div>`;
         }).join('');
