@@ -254,7 +254,7 @@
 <body>
 
 <div class="header">
-    <div class="eyebrow">VAILVALLEYREPORTS.COM</div>
+    <div class="eyebrow">VAILVALLEYREPORT.COM</div>
     <h1>For outdoor enthusiasts who work and play in the mountains of Vail and Eagle River Valley</h1>
     <div class="subtitle">Temperature &amp; weather at the valley's key points — top to bottom</div>
     <div class="last-updated" id="lastUpdated">Loading data...</div>
@@ -282,14 +282,14 @@
     Data: <a href="https://www.weather.gov" target="_blank">National Weather Service</a> ·
     <a href="https://www.nrcs.usda.gov/wps/portal/wcc/home/" target="_blank">NRCS SNOTEL</a> ·
     <a href="https://open-meteo.com" target="_blank">Open-Meteo</a><br>
-    Auto-refreshes every 15 minutes · vailvalleyreports.com
+    Auto-refreshes every 15 minutes · vailvalleyreport.com
 </div>
 
 <script>
 (() => {
     const REFRESH_INTERVAL = 15 * 60 * 1000;
     const STALE_MS = 2 * 60 * 60 * 1000; // sensor readings older than 2h fall back to estimate
-    const NWS_HEADERS = { 'User-Agent': 'VailValleyReports (vailvalleyreports.com)' };
+    const NWS_HEADERS = { 'User-Agent': 'VailValleyReports (vailvalleyreport.com)' };
 
     // ─── LOCATIONS (ordered summit → valley floor) ───────────────────
     // source: 'nws' (station obs), 'snotel' (NRCS AWDB hourly TOBS), 'openmeteo' (model estimate)
