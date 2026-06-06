@@ -137,6 +137,18 @@
             color: var(--text-muted);
             margin-top: 5px;
         }
+        .cam-link {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            margin-top: 7px;
+            padding: 3px 10px;
+            background: var(--accent-light);
+            border-radius: 6px;
+        }
+        .cam-link:hover { background: #d9e9fd; }
 
         .loc-temp {
             font-size: 2.6rem;
@@ -306,36 +318,42 @@
             id: 'vail-pass', name: 'Vail Pass', tier: 'summit',
             elevFt: 10662, source: 'nws', station: 'CAVLP',
             sourceLabel: 'CDOT gauge at the pass (10,249 ft)',
+            cam: { url: 'https://maps.cotrip.org/list/cameras?searchTerm=Vail%20Pass&page=1&pageRecordLimit=25', label: 'CDOT Vail Pass cams' },
             lat: 39.5310, lon: -106.2180, elevM: 3250,
         },
         {
             id: 'vail-top', name: 'Top of Vail Mountain', tier: 'summit',
             elevFt: 10310, source: 'snotel', station: '842:CO:SNTL',
             sourceLabel: 'SNOTEL #842 on upper Vail Mtn (10,310 ft)',
+            cam: { url: 'https://www.vail.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Vail Mountain cams' },
             lat: 39.6178, lon: -106.3805, elevM: 3142,
         },
         {
             id: 'vail-base', name: 'Base of Vail', tier: '',
             elevFt: 8150, source: 'nws', station: 'CO092',
             sourceLabel: 'CDOT gauge at Dowd Junction, 2 mi west (7,776 ft)',
+            cam: { url: 'https://www.vail.gov/visiting/live-webcams', label: 'Vail Village cams' },
             lat: 39.6403, lon: -106.3742, elevM: 2484,
         },
         {
             id: 'bc-top', name: 'Top of Beaver Creek', tier: 'summit',
             elevFt: 9480, source: 'snotel', station: '1040:CO:SNTL',
             sourceLabel: 'SNOTEL #1040 McCoy Park, upper mtn (9,480 ft)',
+            cam: { url: 'https://www.beavercreek.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Beaver Creek mountain cams' },
             lat: 39.5990, lon: -106.5400, elevM: 2890,
         },
         {
             id: 'bc-base', name: 'Base of Beaver Creek', tier: '',
             elevFt: 8080, source: 'openmeteo', station: null,
             sourceLabel: 'No public sensor — modeled estimate',
+            cam: { url: 'https://www.beavercreek.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Beaver Creek village cams' },
             lat: 39.6042, lon: -106.5165, elevM: 2463,
         },
         {
             id: 'eagle-airport', name: 'Eagle Airport', tier: 'valley',
             elevFt: 6539, source: 'nws', station: 'KEGE',
             sourceLabel: 'Eagle County Regional Airport ASOS (6,539 ft)',
+            cam: { url: 'https://maps.cotrip.org/list/cameras?searchTerm=Gypsum&page=1&pageRecordLimit=25', label: 'CDOT I-70 cams near airport' },
             lat: 39.6447, lon: -106.9517, elevM: 1993,
         },
     ];
@@ -380,6 +398,7 @@
                     <div class="loc-cond" id="cond-${loc.id}">&nbsp;</div>
                     <div class="loc-wx" id="wx-${loc.id}"></div>
                     <div class="loc-source" id="src-${loc.id}"><span class="status-dot ${loc.source === 'openmeteo' ? 'est' : 'live'}"></span>${loc.sourceLabel}</div>
+                    ${loc.cam ? `<a class="cam-link" href="${loc.cam.url}" target="_blank" rel="noopener">&#128247; ${loc.cam.label} &#8599;</a>` : ''}
                 </div>
                 <div class="loc-temp loading-temp" id="temp-${loc.id}">—</div>
             </div>
