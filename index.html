@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vail Valley Report — Temperature & Weather at Every Key Point</title>
-    <meta name="description" content="Real-time temperature and weather for Vail Pass, Vail Mountain, Beaver Creek, Edwards, and Gypsum — top to bottom of the valley on one page.">
+    <meta name="description" content="Real-time temperature and weather for Vail Pass, Vail Mountain, Beaver Creek, Edwards, and Gypsum, top to bottom of the valley on one page.">
     <style>
         :root {
             --bg: #eef3f8;
@@ -275,7 +275,7 @@
 <div class="header">
     <div class="eyebrow">VAILVALLEYREPORT.COM</div>
     <h1>For outdoor enthusiasts who work and play in the mountains of Vail and Eagle River Valley</h1>
-    <div class="subtitle">Temperature &amp; weather at the valley's key points — top to bottom</div>
+    <div class="subtitle">Temperature &amp; weather at the valley's key points, top to bottom</div>
     <div class="last-updated" id="lastUpdated">Loading data...</div>
     <button class="refresh-btn" onclick="refreshAll()">&#8635; Refresh</button>
 </div>
@@ -346,7 +346,7 @@
         {
             id: 'bc-base', name: 'Base of Beaver Creek', tier: '',
             elevFt: 8080, source: 'openmeteo', station: null,
-            sourceLabel: 'No public sensor — modeled estimate',
+            sourceLabel: 'No public sensor: modeled estimate',
             cam: { url: 'https://www.beavercreek.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Beaver Creek village cams' },
             lat: 39.6042, lon: -106.5165, elevM: 2463,
         },
@@ -433,7 +433,7 @@
         const srcEl = document.getElementById(`src-${loc.id}`);
         const dot = `<span class="status-dot ${estimated ? 'est' : 'live'}"></span>`;
         const label = estimated && loc.source !== 'openmeteo'
-            ? `Sensor offline — modeled estimate`
+            ? `Sensor offline: modeled estimate`
             : loc.sourceLabel;
         const time = asOf ? ` · as of ${asOf}` : '';
         srcEl.innerHTML = `${dot}${label}${time}`;
