@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vail Valley Report — Temperature & Weather at Every Key Point</title>
-    <meta name="description" content="Real-time temperature and weather for Vail Pass, Vail Mountain, Beaver Creek, Edwards, and Gypsum, top to bottom of the valley on one page.">
+    <title>Vail Valley Report — Temperature, Snow & Weather at Every Key Point</title>
+    <meta name="description" content="Real-time temperature, 24-hour snowfall, and weather for Vail Mountain, Beaver Creek, Vail Pass, and Eagle Airport — top to bottom of the valley on one page.">
     <style>
         :root {
             --bg: #eef3f8;
@@ -132,6 +132,18 @@
             color: var(--text-muted);
             margin-top: 3px;
         }
+        .loc-snow {
+            display: inline-block;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #3f63a8;
+            background: #e7effb;
+            border-radius: 6px;
+            padding: 2px 9px;
+            margin-top: 6px;
+        }
+        .loc-snow.snow-none { color: var(--text-muted); font-weight: 600; background: var(--bg); }
+        .loc-snow .snow-cap { font-weight: 500; opacity: 0.75; }
         .loc-source {
             font-size: 0.66rem;
             color: var(--text-muted);
@@ -275,7 +287,7 @@
 <div class="header">
     <div class="eyebrow">VAILVALLEYREPORT.COM</div>
     <h1>For outdoor enthusiasts who work and play in the mountains of Vail and Eagle River Valley</h1>
-    <div class="subtitle">Temperature &amp; weather at the valley's key points, top to bottom</div>
+    <div class="subtitle">Temperature, 24-hour snow &amp; weather at the valley's key points</div>
     <div class="last-updated" id="lastUpdated">Loading data...</div>
     <button class="refresh-btn" onclick="refreshAll()">&#8635; Refresh</button>
 </div>
@@ -320,42 +332,42 @@
             elevFt: 10662, source: 'nws', station: 'CAVLP',
             sourceLabel: 'CDOT gauge at the pass (10,249 ft)',
             cam: { url: 'https://maps.cotrip.org/list/cameras?searchTerm=Vail%20Pass&page=1&pageRecordLimit=25', label: 'CDOT Vail Pass cams' },
-            lat: 39.5310, lon: -106.2180, elevM: 3250,
+            lat: 39.5310, lon: -106.2180, elevM: 3250, snow24: true,
         },
         {
             id: 'vail-top', name: 'Top of Vail Mountain', tier: 'summit',
             elevFt: 10310, source: 'snotel', station: '842:CO:SNTL',
             sourceLabel: 'SNOTEL #842 on upper Vail Mtn (10,310 ft)',
             cam: { url: 'https://www.vail.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Vail Mountain cams' },
-            lat: 39.6178, lon: -106.3805, elevM: 3142,
+            lat: 39.6178, lon: -106.3805, elevM: 3142, snow24: true,
         },
         {
             id: 'vail-base', name: 'Base of Vail', tier: '',
             elevFt: 8150, source: 'nws', station: 'CO092',
             sourceLabel: 'CDOT gauge at Dowd Junction, 2 mi west (7,776 ft)',
             cam: { url: 'https://www.vail.gov/visiting/live-webcams', label: 'Vail Village cams' },
-            lat: 39.6403, lon: -106.3742, elevM: 2484,
+            lat: 39.6403, lon: -106.3742, elevM: 2484, snow24: true,
         },
         {
             id: 'bc-top', name: 'Top of Beaver Creek', tier: 'summit',
             elevFt: 9480, source: 'snotel', station: '1040:CO:SNTL',
             sourceLabel: 'SNOTEL #1040 McCoy Park, upper mtn (9,480 ft)',
             cam: { url: 'https://www.beavercreek.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Beaver Creek mountain cams' },
-            lat: 39.5990, lon: -106.5400, elevM: 2890,
+            lat: 39.5990, lon: -106.5400, elevM: 2890, snow24: true,
         },
         {
             id: 'bc-base', name: 'Base of Beaver Creek', tier: '',
             elevFt: 8080, source: 'openmeteo', station: null,
             sourceLabel: 'No public sensor: modeled estimate',
             cam: { url: 'https://www.beavercreek.com/the-mountain/mountain-conditions/mountain-cams.aspx', label: 'Beaver Creek village cams' },
-            lat: 39.6042, lon: -106.5165, elevM: 2463,
+            lat: 39.6042, lon: -106.5165, elevM: 2463, snow24: true,
         },
         {
             id: 'eagle-airport', name: 'Eagle Airport', tier: 'valley',
             elevFt: 6539, source: 'nws', station: 'KEGE',
             sourceLabel: 'Eagle County Regional Airport ASOS (6,539 ft)',
             cam: { url: 'https://maps.cotrip.org/list/cameras?searchTerm=Gypsum&page=1&pageRecordLimit=25', label: 'CDOT I-70 cams near airport' },
-            lat: 39.6447, lon: -106.9517, elevM: 1993,
+            lat: 39.6447, lon: -106.9517, elevM: 1993, snow24: true,
         },
     ];
 
@@ -398,6 +410,7 @@
                     <div><span class="loc-elev">${loc.elevFt.toLocaleString()} FT &middot; ${Math.round(loc.elevFt * 0.3048).toLocaleString()} M</span></div>
                     <div class="loc-cond" id="cond-${loc.id}">&nbsp;</div>
                     <div class="loc-wx" id="wx-${loc.id}"></div>
+                    ${loc.snow24 ? `<div><span class="loc-snow" id="snow-${loc.id}">❄️ <span class="snow-cap">24h snow: —</span></span></div>` : ''}
                     <div class="loc-source" id="src-${loc.id}"><span class="status-dot ${loc.source === 'openmeteo' ? 'est' : 'live'}"></span>${loc.sourceLabel}</div>
                     ${loc.cam ? `<a class="cam-link" href="${loc.cam.url}" target="_blank" rel="noopener">&#128247; ${loc.cam.label} &#8599;</a>` : ''}
                 </div>
@@ -514,6 +527,54 @@
         return byLoc;
     }
 
+    // ─── 24-HOUR SNOWFALL (modeled, Open-Meteo) ──────────────────────
+    // Sums hourly snowfall over the trailing 24 h for every snow24 location.
+    async function fetchSnow24() {
+        const spots = LOCATIONS.filter(l => l.snow24);
+        if (!spots.length) return {};
+        const lats = spots.map(l => l.lat).join(',');
+        const lons = spots.map(l => l.lon).join(',');
+        const elevs = spots.map(l => l.elevM).join(',');
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&elevation=${elevs}&hourly=snowfall&past_days=1&forecast_days=1&precipitation_unit=inch&timezone=America%2FDenver`;
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`Open-Meteo snow ${resp.status}`);
+        const data = await resp.json();
+        const arr = Array.isArray(data) ? data : [data];
+        const now = Date.now();
+        const cutoff = now - 24 * 60 * 60 * 1000;
+        const byLoc = {};
+        spots.forEach((loc, i) => {
+            const h = arr[i]?.hourly;
+            if (!h || !Array.isArray(h.time)) return;
+            let sum = 0;
+            for (let j = 0; j < h.time.length; j++) {
+                const t = new Date(h.time[j]).getTime(); // local (America/Denver) wall time
+                const v = h.snowfall[j];
+                if (t > cutoff && t <= now && v != null) sum += v;
+            }
+            byLoc[loc.id] = sum;
+        });
+        return byLoc;
+    }
+
+    function setSnow(loc, inches) {
+        const el = document.getElementById(`snow-${loc.id}`);
+        if (!el) return;
+        if (inches == null) { // fetch failed
+            el.className = 'loc-snow snow-none';
+            el.innerHTML = '❄️ <span class="snow-cap">24h snow: unavailable</span>';
+            return;
+        }
+        const v = inches < 0 ? 0 : inches;
+        if (v < 0.05) {
+            el.className = 'loc-snow snow-none';
+            el.innerHTML = '❄️ <span class="snow-cap">No new snow (24h)</span>';
+        } else {
+            el.className = 'loc-snow';
+            el.innerHTML = `❄️ ${v.toFixed(1)}&Prime; <span class="snow-cap">last 24h</span>`;
+        }
+    }
+
     // ─── 7-DAY OUTLOOK ───────────────────────────────────────────────
     const OUTLOOK_SPOTS = [
         { id: 'vail-top', label: 'Top of Vail' },
@@ -585,6 +646,7 @@
 
         // Open-Meteo serves conditions for sensor cards and full data for estimate cards / fallbacks
         const omPromise = fetchOpenMeteoAll().catch(() => ({}));
+        const snowPromise = fetchSnow24().catch(() => ({}));
 
         await Promise.all(LOCATIONS.map(async loc => {
             let sensor = null;
@@ -607,6 +669,11 @@
                 setCard(loc, om.tempF, om.cond, fmtTime(new Date()), true, om);
             } else {
                 setCard(loc, null, null, null, loc.source === 'openmeteo', null);
+            }
+
+            if (loc.snow24) {
+                const snowMap = await snowPromise;
+                setSnow(loc, loc.id in snowMap ? snowMap[loc.id] : null);
             }
         }));
 
