@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vail Valley Report — Temperature, Snow & Weather at Every Key Point</title>
     <meta name="description" content="Real-time temperature, 24-hour snowfall, and weather for Vail Mountain, Beaver Creek, Vail Pass, and Eagle Airport — top to bottom of the valley on one page.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='40' fill='%231d4f91'/%3E%3Crect y='13.33' width='60' height='13.34' fill='%23ffffff'/%3E%3Ccircle cx='22' cy='20' r='10' fill='%23FFD700'/%3E%3Cpath d='M31.2 6.9 A16 16 0 1 0 31.2 33.1 L27.7 28.2 A10 10 0 1 1 27.7 11.8 Z' fill='%23BF0A30'/%3E%3C/svg%3E">
     <style>
         :root {
             --bg: #eef3f8;
@@ -17,6 +18,9 @@
             --border: #e2e8f0;
             --green: #16a34a;
             --orange: #ea580c;
+            --co-blue: #1d4f91;
+            --co-red: #bf0a30;
+            --co-gold: #ffd24a;
             --radius: 14px;
             --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
         }
@@ -37,13 +41,23 @@
             color: white;
             padding: 26px 16px 20px;
             text-align: center;
+            border-bottom: 3px solid var(--co-gold);
         }
         .header .eyebrow {
             font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 2.5px;
-            opacity: 0.65;
+            color: rgba(255,255,255,0.65);
             margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .co-emblem {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
         .header h1 {
             font-size: 1.15rem;
@@ -247,7 +261,7 @@
             cursor: pointer;
             transition: all 0.15s;
         }
-        .outlook-chip.active { background: var(--accent); color: white; }
+        .outlook-chip.active { background: var(--co-gold); color: var(--primary); }
         .outlook-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -267,6 +281,21 @@
         .day-precip { font-size: 0.62rem; color: var(--accent); font-weight: 600; margin-top: 2px; min-height: 0.9em; }
         .day-snow { color: #5b7fc7; }
 
+        /* COLORADO FLAG WATERMARK — sits behind the white cards, only visible in page-background gaps */
+        .co-watermark {
+            position: fixed;
+            right: -8vmin;
+            bottom: -8vmin;
+            width: 60vmin;
+            height: 60vmin;
+            z-index: -1;
+            opacity: 0.06;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='26' fill='%23FFD700'/%3E%3Cpath d='M74.1 15.6 A42 42 0 1 0 74.1 84.4 L64.9 71.3 A26 26 0 1 1 64.9 28.7 Z' fill='%23BF0A30'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
         /* FOOTER */
         .footer {
             text-align: center;
@@ -275,6 +304,17 @@
             color: var(--text-muted);
         }
         .footer a { color: var(--accent); }
+        .footer .made-in-co {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer .made-in-co svg {
+            width: 18px;
+            height: 12px;
+            border-radius: 2px;
+            box-shadow: 0 0 0 1px var(--border);
+        }
 
         @media (max-width: 420px) {
             .loc-temp { font-size: 2.3rem; }
@@ -284,8 +324,16 @@
 </head>
 <body>
 
+<div class="co-watermark" aria-hidden="true"></div>
+
 <div class="header">
-    <div class="eyebrow">VAILVALLEYREPORT.COM</div>
+    <div class="eyebrow">
+        <svg class="co-emblem" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="26" fill="#FFD700"/>
+            <path d="M74.1 15.6 A42 42 0 1 0 74.1 84.4 L64.9 71.3 A26 26 0 1 1 64.9 28.7 Z" fill="#BF0A30"/>
+        </svg>
+        VAILVALLEYREPORT.COM
+    </div>
     <h1>For outdoor enthusiasts who work and play in the mountains of Vail and Eagle River Valley</h1>
     <div class="subtitle">Temperature, 24-hour snow &amp; weather at the valley's key points</div>
     <div class="last-updated" id="lastUpdated">Loading data...</div>
@@ -314,6 +362,14 @@
     <a href="https://www.nrcs.usda.gov/wps/portal/wcc/home/" target="_blank">NRCS SNOTEL</a> ·
     <a href="https://open-meteo.com" target="_blank">Open-Meteo</a><br>
     Auto-refreshes every 15 minutes · vailvalleyreport.com<br><br>
+    <span class="made-in-co">
+        <svg viewBox="0 0 60 40" aria-hidden="true">
+            <rect width="60" height="40" fill="#1d4f91"/>
+            <rect y="13.33" width="60" height="13.34" fill="#ffffff"/>
+            <circle cx="22" cy="20" r="10" fill="#FFD700"/>
+            <path d="M31.2 6.9 A16 16 0 1 0 31.2 33.1 L27.7 28.2 A10 10 0 1 1 27.7 11.8 Z" fill="#BF0A30"/>
+        </svg>
+        Made in Colorado</span><br><br>
     Built by <a href="https://dobleai.com" target="_blank" rel="noopener">Doble AI</a>
 </div>
 
