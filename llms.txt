@@ -1,0 +1,9 @@
+# Vail Valley Report
+
+> Real-time temperature, 24-hour snowfall, and weather for Vail Mountain, Beaver Creek, Vail Pass, and Eagle Airport — top to bottom of the valley on one page.
+
+## Pages
+
+- [Vail Valley Report — Temperature, Snow & Weather at Every Key Point](https://vailvalleyreport.com/): Real-time temperature, 24-hour snowfall, and weather for Vail Mountain, Beaver Creek, Vail Pass, and Eagle Airport — top to bottom of the valley on one page.
+
+Sitemap: https://vailvalleyreport.com/sitemap.xml
